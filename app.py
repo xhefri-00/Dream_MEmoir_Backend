@@ -3,6 +3,8 @@ from extensions import db, jwt
 from routes.auth_routes import auth_bp
 from routes.blog_routes import blog_bp
 from routes.bookmark_routes import bookmark_bp
+from flask_cors import CORS
+
 
 def create_app():
     """
@@ -12,6 +14,7 @@ def create_app():
         Flask application instance.
     """
     app = Flask(__name__)
+    CORS(app)
     app.config.from_object("config.Config")
 
     # Initialize extensions
