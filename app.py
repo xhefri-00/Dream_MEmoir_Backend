@@ -14,9 +14,9 @@ def create_app():
         Flask application instance.
     """
     app = Flask(__name__)
-    CORS(app)
     app.config.from_object("config.Config")
-
+    CORS(app, resources={r"/*": {"origins": "*"}}, supports_credentials=True)
+    
     # Initialize extensions
     db.init_app(app)
     jwt.init_app(app)
