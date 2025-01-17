@@ -1,4 +1,4 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, Request
 from extensions import db
 from models import User
 from flask_jwt_extended import create_access_token
@@ -39,6 +39,7 @@ def login_user():
         Response object containing the access token or error message.
     """
     data = request.json
+    print(request.get_data())
     # Use email to query the user for authentication
     user = User.query.filter_by(email=data.get("email")).first()
 
@@ -48,4 +49,4 @@ def login_user():
     # Generate a JWT token with email as identity
     access_token = create_access_token(identity=str(user.id))
 
-    return jsonify({"access_token": access_token, "username":data.get("username")}), 200
+    return jsonify({"access_token": access_token, "username":user.username}), 200
