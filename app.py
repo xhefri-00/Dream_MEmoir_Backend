@@ -4,6 +4,7 @@ from routes.auth_routes import auth_bp
 from routes.blog_routes import blog_bp
 from routes.bookmark_routes import bookmark_bp
 from flask_cors import CORS
+from flask_talisman import Talisman
 
 
 def create_app():
@@ -14,7 +15,8 @@ def create_app():
         Flask application instance.
     """
     app = Flask(__name__)
-    CORS(app, resources={r"/*": {"origins": "https://dream-m-emoir-frontend-hh7ec6ddr-xhefris-projects.vercel.app"}}, 
+    Talisman(app, content_security_policy=None)
+    CORS(app, resources={r"/*": {"origins": "*"}}, 
      methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"], 
      allow_headers=["Content-Type", "Authorization"], 
      supports_credentials=True)
@@ -22,7 +24,7 @@ def create_app():
 
     @app.after_request
     def add_cors_headers(response):
-        response.headers["Access-Control-Allow-Origin"] = "https://dream-m-emoir-frontend-hh7ec6ddr-xhefris-projects.vercel.app"
+        response.headers["Access-Control-Allow-Origin"] = "*"
         response.headers["Access-Control-Allow-Methods"] = "GET, POST, PUT, DELETE, OPTIONS"
         response.headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization"
         response.headers["Access-Control-Allow-Credentials"] = "true"
@@ -33,7 +35,7 @@ def create_app():
     def handle_preflight():
         if request.method == "OPTIONS":
             response = Flask.response_class()
-            response.headers["Access-Control-Allow-Origin"] = "https://dream-m-emoir-frontend-hh7ec6ddr-xhefris-projects.vercel.app"
+            response.headers["Access-Control-Allow-Origin"] = "*"
             response.headers["Access-Control-Allow-Methods"] = "GET, POST, PUT, DELETE, OPTIONS"
             response.headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization"
             response.headers["Access-Control-Allow-Credentials"] = "true"
