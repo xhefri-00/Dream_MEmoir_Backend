@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, request
 from extensions import db, jwt
 from routes.auth_routes import auth_bp
 from routes.blog_routes import blog_bp
@@ -14,16 +14,39 @@ def create_app():
         Flask application instance.
     """
     app = Flask(__name__)
+    CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}}, 
+     methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"], 
+     allow_headers=["Content-Type", "Authorization"], 
+     supports_credentials=True)
     app.config.from_object("config.Config")
-    CORS(app, resources={r"/*": {"origins": "*"}}, supports_credentials=True)
-    
+
+    @app.after_request
+    def add_cors_headers(response):
+        response.headers["Access-Control-Allow-Origin"] = "http://localhost:3000"
+        response.headers["Access-Control-Allow-Methods"] = "GET, POST, PUT, DELETE, OPTIONS"
+        response.headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization"
+        response.headers["Access-Control-Allow-Credentials"] = "true"
+        print("CORS Headers Added")  # Debugging log
+        return response
+
+    @app.before_request
+    def handle_preflight():
+        if request.method == "OPTIONS":
+            response = Flask.response_class()
+            response.headers["Access-Control-Allow-Origin"] = "http://localhost:3000"
+            response.headers["Access-Control-Allow-Methods"] = "GET, POST, PUT, DELETE, OPTIONS"
+            response.headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization"
+            response.headers["Access-Control-Allow-Credentials"] = "true"
+            response.status_code = 200
+            return response
+
     # Initialize extensions
     db.init_app(app)
     jwt.init_app(app)
 
     # Register blueprints
     app.register_blueprint(auth_bp, url_prefix="/auth")
-    app.register_blueprint(blog_bp)
+    app.register_blueprint(blog_bp, url_prefix="/blogs")
     app.register_blueprint(bookmark_bp, url_prefix="/bookmarks")
 
     # Define home route
