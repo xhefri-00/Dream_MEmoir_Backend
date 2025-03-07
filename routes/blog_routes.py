@@ -10,7 +10,7 @@ from models import Blog, Bookmark
 blog_bp = Blueprint("blogs", __name__, url_prefix="/blogs")
 
 
-@blog_bp.route("/", methods=["GET"])
+@blog_bp.route("", methods=["GET"])
 @jwt_required()
 def get_blogs():
     """
@@ -25,7 +25,7 @@ def get_blogs():
 
     # Fetch only public blogs for the feed
     blogs = Blog.query.filter_by(is_public=True).all()
-
+    
     return jsonify(
         [
             {"id": blog.id, "title": blog.title, "content": blog.content, "user_id": blog.user_id}
@@ -62,7 +62,7 @@ def get_blogs_by_user(user_id):
 
 
 
-@blog_bp.route("/", methods=["POST"])
+@blog_bp.route("", methods=["POST"])
 @jwt_required()
 def create_blog():
     """

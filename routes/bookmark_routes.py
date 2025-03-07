@@ -10,7 +10,7 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 bookmark_bp = Blueprint("bookmarks", __name__)
 
 
-@bookmark_bp.route("/", methods=["GET"])
+@bookmark_bp.route("", methods=["GET"])
 @jwt_required()
 def get_bookmarks():
     """
@@ -28,7 +28,7 @@ def get_bookmarks():
     return jsonify(valid_bookmarks), 200
 
 
-@bookmark_bp.route("/", methods=["POST"])
+@bookmark_bp.route("", methods=["POST"])
 @jwt_required()
 def add_bookmark():
     """
