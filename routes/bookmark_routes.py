@@ -23,7 +23,7 @@ def get_bookmarks():
     bookmarks = Bookmark.query.filter_by(user_id=user).all()
     # Filter out bookmarks with missing blogs
     valid_bookmarks = [
-        {"id": bm.id, "blog": bm.blog.title} for bm in bookmarks if bm.blog is not None
+        {"id": bm.id, "title": bm.blog.title, "content": bm.blog.content} for bm in bookmarks if bm.blog is not None
     ]
     return jsonify(valid_bookmarks), 200
 
