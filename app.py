@@ -16,7 +16,7 @@ def create_app():
     """
     app = Flask(__name__)
     Talisman(app, content_security_policy=None)
-    CORS(app, resources={r"/*": {"origins": "dream-me-moir.vercel.app"}}, 
+    CORS(app, resources={r"/*": {"origins": "https://dream-me-moir.vercel.app"}}, 
      methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"], 
      allow_headers=["Content-Type", "Authorization"], 
      supports_credentials=True)
@@ -24,7 +24,7 @@ def create_app():
 
     @app.after_request
     def add_cors_headers(response):
-        response.headers["Access-Control-Allow-Origin"] = "dream-me-moir.vercel.app"
+        response.headers["Access-Control-Allow-Origin"] = "https://dream-me-moir.vercel.app"
         response.headers["Access-Control-Allow-Methods"] = "GET, POST, PUT, DELETE, OPTIONS"
         response.headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization"
         response.headers["Access-Control-Allow-Credentials"] = "true"
@@ -35,7 +35,7 @@ def create_app():
     def handle_preflight():
         if request.method == "OPTIONS":
             response = Flask.response_class()
-            response.headers["Access-Control-Allow-Origin"] = "dream-me-moir.vercel.app"
+            response.headers["Access-Control-Allow-Origin"] = "https://dream-me-moir.vercel.app"
             response.headers["Access-Control-Allow-Methods"] = "GET, POST, PUT, DELETE, OPTIONS"
             response.headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization"
             response.headers["Access-Control-Allow-Credentials"] = "true"
